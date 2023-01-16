@@ -4,16 +4,16 @@ import csv
 
 def read_file(csv_filename):
     """Läs innehållet i en CSV-filen och returnera den som en lista."""
-    with open(csv_filename, mode="r", encoding="UTF-8") as csv_data: # Läser CSV-filen
+    with open(csv_filename, mode="r", encoding="UTF-8") as csv_data: # Läser CSV-filen för att få information om data
         reader = csv.reader(csv_data, delimiter=";")                 # Gör varje rad i CSV-filen till en lista, och lämna tillbaka det
         return list(reader)                                          # Skapar en lista med innehållet av flera listor
 
-# Läs data från CSV-filerna och lagra dem
+# Läs data från CSV-filerna och lagra dem för att kunna använd i den här cellen och andra celler
 kpiData       = read_file("kpi-1.csv")
 tjansteData   = read_file("tjänster-1.csv")
 livsmedelData = read_file("livsmedel-1.csv")
 
-# Skriv ut de två första raderna av varje fil
+# Skriv ut de två första raderna av varje fil för att visa lite exempel data till användaren
 print("\033[1mkpiData:\033[0m")         # Bold text
 print(kpiData[:2])
 print("\n\033[1mtjansteData:\033[0m")   # Ny rad och sen bold text
@@ -30,8 +30,8 @@ def calc_mean(all_år, få_månad):
     data_alla_år, lista_medelvärde, månad_värde_för_alla_år = [], [], []
     # Beräkna all åren data för grafen
     for år in reversed(all_år[1:]):
-        data_alla_år.append(int(år[0])) # lägg till året
-        # Samla Ihop hela årets gemensam summa, använd inte första index eftersom det är året som data är för
+        data_alla_år.append(int(år[0])) # Lägg till året
+        # Samla ihop hela årets gemensam summa, använd inte första index eftersom det är året som data är för
         summa = 0
         for månad in år[1:]:
             summa += float(månad)
@@ -43,7 +43,7 @@ def calc_mean(all_år, få_månad):
         månad_värde_för_alla_år.append(float(år[få_månad]))
 
     # Skapa grafer och ett stapeldiagram
-    if len(månad_värde_för_alla_år) != len(data_alla_år):                 # Hantera fel om inte samma längd.
+    if len(månad_värde_för_alla_år) != len(data_alla_år):                 # Hantera fel om inte samma längd på x och y
         plt.plot(data_alla_år[:-1], månad_värde_för_alla_år, color="red")
     else:
         plt.plot(data_alla_år, månad_värde_för_alla_år, color="red")
@@ -77,25 +77,25 @@ calc_mean(kpiData, presentera_månad) # Beräkna och skapa en graf
 def plotta_data(data_lista):
     """Skapa ett diagram utifrån prisutvecklingen från en lista."""
     max_värde = 0
-    data_str = [] # samla alla olika varor tjänster
-    åren = [int(year) for year in data_lista[0][1:]] # samla alla år i en lista
+    data_str = [] # Samla alla olika varor tjänster
+    åren = [int(year) for year in data_lista[0][1:]] # Samla alla år i en lista
     
     # Skapa grafen
     for data in data_lista[1:]:
-        data_str.append(data[0])
+        data_str.append(data[0])     # Spara tjänst
         y = []
-        for d in data[1:]:           # spara alla värderna för kategori
+        for d in data[1:]:           # Spara alla värderna för kategori
             y.append(float(d))
-            if float(d) > max_värde: # spara största värdet för y-axeln, beroende på största värdet som finns i data_lista
+            if float(d) > max_värde: # Spara största värdet för y-axeln, beroende på största värdet som finns i data_lista
                 max_värde = float(d)
-        plt.plot(åren, y)            # gör graf för kategori
+        plt.plot(åren, y)            # Gör graf för kategori
     
     plt.legend(data_str, loc="upper left")
     plt.xlim(1978, 2025)
-    max_värde += max_värde / 20 #  lägg till +5% i y-axel värdet för att det ska se snyggt ut
+    max_värde += max_värde / 20 #  Lägg till +5% i y-axel värdet för att det ska se snyggt ut
     plt.ylim(80, max_värde)
 
-    # Lägg till info
+    # Lägg till info till diagramet som skapas
     plt.xlabel("År")
     plt.ylabel("Prisutvecklingen")
     if len(data_str) == 7:
@@ -105,8 +105,8 @@ def plotta_data(data_lista):
     plt.grid(True)
     plt.show()
 
-plotta_data(livsmedelData)
 plotta_data(tjansteData)
+plotta_data(livsmedelData)
 
 ## Deluppgift 4
 
@@ -114,9 +114,9 @@ def Prisutveckling_I_Procentform(lista1, lista2):
     """Beräknar prisutvecklingen i procentform för olika kategorier, år 1980–2021.
     Skriver sen ut och ritar resultatet i en tabell och ett stapeldiagram."""
     for index, Data_Lista in enumerate([lista1, lista2]):
-        # Skriv ut text fyllning
+        # Skriv ut text fyllning för tabelen
         print("+-------------------------------------------------------------------------+")
-        # lägg till rätt text för rubrik
+        # Lägg till rätt text för rubrik
         titel = "|Kategorier "
         if len(Data_Lista) == 7:
             titel += "av varor och tjänster"
@@ -126,10 +126,9 @@ def Prisutveckling_I_Procentform(lista1, lista2):
         print("{:42.50}{:<10}".format(titel, "|Prisutvecklingen i procentform"))
         print("+=========================================+===============================+")
         
-        # Spara och beräkna prisutveckling i olika kategorier
-        x, y = [], []
+        x, y = [], [] # Spara x-axeln och y-axeln
         for data in Data_Lista[1:]:
-            # Beräkna
+            # Spara och beräkna prisutveckling i olika kategorier
             pip = data[-1:][0]
             pip = float(pip) - 100 # Ta bort 100%
             pip = round(pip, 2)    # Begränsar floats till två decimaler
@@ -170,7 +169,7 @@ def Månad_Varje_År_Störst_KPI_Förändringen(åren):
             månader = åren[index]         # All data för all månader.
             summa = float(månader[1])
             
-            # Beräkna januari (anvönd föraåret dec)
+            # Beräkna januari (anvönd förra året dec)
             största_KPIChange_månad_värde = (float(åren[index][1]) - float(åren[index+1][12])) / float(åren[index+1][12])
             största_KPIChange_månad = 1
 
@@ -241,9 +240,7 @@ Månad_Varje_År_Störst_KPI_Förändringen(kpiData)
 def Main():
     """Meny där användaren anger ett av menyalternativen.
     När menyalternativet är utfört ska användaren på nytt kunna ange ett menyalternativ."""
-    data_kpiData, data_tjansteData, data_livsmedelData = None, None, None
     Loop = True
-
     while Loop == True:
         print("Program för att läsa in och analysera resultatet i uppgift 1 – 5")
         print()
@@ -255,18 +252,18 @@ def Main():
         print("6. Avsluta programmet")
         print()
         val = input("Välj menyalternativ (1–6): ")
-        if val == "1":
+        if val == "1": # Läser in csv-filerna
             # Få information om data filernas namn
             val = input("namn för kpi.csv(standardnamn: kpi-1.csv): ")
-            str_kpiData = val if val != "" else "kpi-1.csv"
+            kpiData = val if val != "" else "kpi-1.csv"
             val = input("namn för tjänster.csv(standardnamn: tjänster-1.csv): ")
-            str_tjansteData = val if val != "" else "tjänster-1.csv"
+            tjansteData = val if val != "" else "tjänster-1.csv"
             val = input("namn för livsmedel.csv(standardnamn: livsmedel-1.csv): ")
-            str_livsmedelData = val if val != "" else "livsmedel-1.csv"
+            livsmedelData = val if val != "" else "livsmedel-1.csv"
             # Hämta data
-            data_kpiData = read_file(str_kpiData)
-            data_tjansteData = read_file(str_tjansteData)
-            data_livsmedelData = read_file(str_livsmedelData)
+            kpiData = read_file(kpiData)
+            tjansteData = read_file(tjansteData)
+            livsmedelData = read_file(livsmedelData)
             # Skriv ut de två första raderna av varje fil
             print("\033[1mkpiData:\033[0m")         # Bold text
             print(kpiData[:2])
@@ -274,9 +271,7 @@ def Main():
             print(tjansteData[:2])
             print("\n\033[1mlivsmedelData:\033[0m") # Ny rad och sen bold text
             print(livsmedelData[:2])
-        elif val == "2":
-            if kpiData == None:
-                continue
+        elif val == "2": # Konsumentprisindex under åren 1980 – 2022
             # Fråga efter en månad (1 – 12).
             presentera_månad = int(input("Ange vilken månad som ska presenteras: "))
             # Felkontroll, lite grann
@@ -285,23 +280,18 @@ def Main():
             elif presentera_månad <= 0:
                 presentera_månad = 1
             calc_mean(kpiData, presentera_månad) # Beräkna och skapa en graf
-        elif val == "3":
-            if data_tjansteData == None or data_livsmedelData == None:
-                continue
-            plotta_data(data_tjansteData)
-            plotta_data(data_livsmedelData)
-        elif val == "4":
-            if data_tjansteData == None or data_livsmedelData == None:
-                continue
-            Prisutveckling_I_Procentform(data_tjansteData, data_livsmedelData)
-        elif val == "5":
-            if data_kpiData == None:
-                continue
-            Månad_Varje_År_Störst_KPI_Förändringen(data_kpiData)
-        elif val == "6":
+        elif val == "3": # Prisutvecklingen för de olika kategorierna
+            plotta_data(tjansteData)
+            plotta_data(livsmedelData)
+        elif val == "4": # Prisutvecklingen i procentform för de olika kategorierna
+            Prisutveckling_I_Procentform(tjansteData, livsmedelData)
+        elif val == "5": # Förändringar i KPI
+            Månad_Varje_År_Störst_KPI_Förändringen(kpiData)
+        elif val == "6": # Avsluta programmet
             print("Avslutar programmet")
             Loop = False
         else:
             print("Okänt kommando")
+            
 Main()
 print("Programmet är avslutat")
