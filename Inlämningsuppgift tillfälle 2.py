@@ -211,7 +211,7 @@ def Månad_Varje_År_Störst_KPI_Förändringen(åren):
 
     for data in reversed(tabel_data):
         #         år | %     mån | årsmedelvärde
-        print("{:<22}{:<13}{:<23}{}".format(data[0],
+        print("{:<22}{:<13}{:<21}{}".format(data[0],
                                             round(data[1] * 100, 2), # Omvandla till procent och avrunda
                                             alla_månader[data[2]],
                                             round(data[3], 2) ))     # Omvandla till procent och avrunda
