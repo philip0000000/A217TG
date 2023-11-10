@@ -185,3 +185,4 @@ def read_file2():
 inkomstData = read_file2()
 
 print(inkomstData[:3])
+//
