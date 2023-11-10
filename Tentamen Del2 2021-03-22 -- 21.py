@@ -246,4 +246,3 @@ def medelvärde_av_energipriser_för_hushållskunder():
     plt.show()
     
 medelvärde_av_energipriser_för_hushållskunder()
-//
