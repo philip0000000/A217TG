@@ -58,7 +58,7 @@ def calc_mean(all_år, få_månad):
     plt.title("Konsumentprisindex År 1980-2022")
     plt.xlabel("År")     # X-axel och y-axel namn
     plt.ylabel("Konsumentprisindex")
-    plt.xlim(1980, 2023) # Max och min värde på x-axel och y-axel.
+    plt.xlim(1980, 2021) # Max och min värde på x-axel och y-axel.
     plt.ylim(100, 400)
     plt.grid(True)
     plt.show()
